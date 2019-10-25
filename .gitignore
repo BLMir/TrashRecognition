@@ -32,3 +32,6 @@ git2changes.sh
 
 src/main/resources/config.properties
 /lib
+dataset-modified-small/*
+dataset-resized/*
+
