@@ -33,7 +33,7 @@ enum class FileExtension(val extension: String) {
 
 data class SuccessGuessPhotoResponse(val accuracy: Double, val trashCategory: TrashCategories)
 
-class UploadService {
+class UploadService(val model: ByteArray, val labels: List<String>) {
 
     init {
         val app = Javalin.create{
@@ -53,11 +53,6 @@ class UploadService {
             val fileName = file!!.filename
 
             FileExtension.validateType(file.extension, file.contentType)
-
-//            val image = ImageIO.read(content)
-//            val resized = resize(image, 500, 500)
-//            val output = File("/tmp/$fileName")
-//            ImageIO.write(resized, "png", output)
 
             uploadFileTo(content, "/tmp/$fileName")
         } catch (ex: BadRequestException) {
@@ -109,20 +104,9 @@ class UploadService {
         FileUtils.copyInputStreamToFile(file, File(path))
     }
 
-    private fun resize(img: BufferedImage, height: Int, width: Int): BufferedImage {
-        val tmp: Image = img.getScaledInstance(width, height, Image.SCALE_SMOOTH)
-        val resized = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
-        val g2d: Graphics2D = resized.createGraphics()
-        g2d.drawImage(tmp, 0, 0, null)
-        g2d.dispose()
-        return resized
-    }
-
     private fun getProbability(imageBytes: ByteArray): List<SuccessGuessPhotoResponse> {
-        val graphDef = File(ClassLoader.getSystemClassLoader().getResource("output_graph.pb")?.file).readBytes()
-        val labels = File(ClassLoader.getSystemClassLoader().getResource("output_labels.txt")?.file).readLines()
         LabelImage.constructAndExecuteGraphToNormalizeImage(imageBytes).use { image ->
-            val labelProbabilities = LabelImage.executeInceptionGraph(graphDef, image)
+            val labelProbabilities = LabelImage.executeInceptionGraph(model, image)
 
             return labelProbabilities.withIndex().map { (index, probability) ->
                 println(
