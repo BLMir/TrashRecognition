@@ -120,6 +120,7 @@
       img.onload = function() {
         ctx.drawImage(img, 0, 0, c.width, c.height);
         let url = c.toDataURL('image/png', 1)
+        imageSrc = url
         resolve(dataURLtoFile(url, 'picture.png'))
       }
 
