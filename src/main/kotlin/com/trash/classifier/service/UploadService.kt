@@ -11,6 +11,8 @@ import io.javalin.http.Context
 import java.awt.Graphics2D
 import java.awt.Image
 import java.awt.image.BufferedImage
+import java.io.InputStream
+import java.lang.IllegalArgumentException
 
 
 private val logger = KotlinLogging.logger {}
@@ -38,6 +40,7 @@ class UploadService {
         app.get("/") { ctx -> ctx.result("Hello World") }
         app.post("/upload") { ctx -> fileUploads(ctx) }
         app.post("/guess-photo") { ctx -> guessPhoto(ctx) }
+        app.post("/teach-machine") { ctx -> teachMachine(ctx) }
     }
 
     private fun fileUploads(ctx: Context) {
@@ -54,7 +57,7 @@ class UploadService {
 //            val output = File("/tmp/$fileName")
 //            ImageIO.write(resized, "png", output)
 
-            FileUtils.copyInputStreamToFile(content, File("/tmp/$fileName"))
+            uploadFileTo(content, "/tmp/$fileName")
         } catch (ex: BadRequestException) {
             logger.error { "Bad Request: ${ex.message}" }
             throw ex
@@ -76,6 +79,32 @@ class UploadService {
             logger.error { "Error guessing a photo" }
             throw ex
         }
+    }
+
+    private fun teachMachine(ctx: Context) {
+        try {
+            val file = ctx.uploadedFile("file") ?: throw BadRequestException("file is mandatory in the request")
+            val category = ctx.formParam("category") ?: throw BadRequestException("category is mandatory in the request")
+            val validCategory = TrashCategories.values().find { it.name == category } ?: throw BadRequestException("Category from request: $category does not exist. Valid categories are: ${TrashCategories.values().toList()}")
+
+            val content = file!!.content
+            val fileName = file!!.filename
+
+            uploadFileTo(content, "/tmp/$validCategory/$fileName")
+
+        } catch (ex: BadRequestException) {
+            logger.error { "Bad Request: ${ex.message}" }
+            throw ex
+        } catch ( ex: IllegalArgumentException) {
+
+        } catch (ex: Exception) {
+            logger.error { "Error guessing a photo" }
+            throw ex
+        }
+    }
+
+    private fun uploadFileTo(file: InputStream, path: String ) {
+        FileUtils.copyInputStreamToFile(file, File(path))
     }
 
     private fun resize(img: BufferedImage, height: Int, width: Int): BufferedImage {
