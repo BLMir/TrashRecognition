@@ -4,6 +4,7 @@
   let uploadContentSectionHidden = false
   let uploadedContentSectionHidden = true
   let imageResult
+  let accuracy
 
   async function onChangeTakePicture(event) {
     let file = await resolveFile(event)
@@ -14,7 +15,7 @@
     if (response.length) {
       let guess = response[0]
       console.log(`It is ${guess.trashCategory} with ${Math.ceil(guess.accuracy)}%`)
-
+      accuracy = `${Math.ceil(guess.accuracy)}%`
       // [{"accuracy":59.76182818412781,"trashCategory":"PLASTIC"},{"accuracy":28.87408137321472,"trashCategory":"TRASH"},{"accuracy":11.353419721126556,"trashCategory":"PAPER"},{"accuracy":0.009257901547243819,"trashCategory":"CARDBOARD"},{"accuracy":0.001283600795431994,"trashCategory":"GLASS"},{"accuracy":1.2141181287006475E-4,"trashCategory":"METAL"}]
       switch(guess.trashCategory) {
         case 'PLASTIC':
@@ -31,7 +32,7 @@
           imageResult = '/glass.png'
           break
         case 'METAL':
-          imageResult = '/organic.png'
+          imageResult = '/plastic.png'
           break
       }
     }
@@ -110,7 +111,7 @@
 </script>
 
 <style>
-  h1 {
+  h1,h2 {
     text-align: center;
   }
 
@@ -187,6 +188,8 @@
     <p>
       <img src={imageResult} alt="" id="result" />
     </p>
+
+    <h2>{accuracy}</h2>
 
     <p id="error">{errorText}</p>
   </section>
