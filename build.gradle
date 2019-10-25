@@ -34,4 +34,5 @@ dependencies {
     compile "commons-io:commons-io:2.5"
     compile "io.github.microutils:kotlin-logging:1.4.6"
     compile "com.fasterxml.jackson.core:jackson-databind:2.10.0.pr1"
+    compile 'org.tensorflow:tensorflow:1.15.0'
 }

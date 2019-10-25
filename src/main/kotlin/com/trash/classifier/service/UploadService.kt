@@ -17,6 +17,7 @@ private val logger = KotlinLogging.logger {}
 
 enum class FileExtension(val extension: String) {
     JPG(".jpg"),
+    PNG(".png"),
     GIF(".gif");
 
     companion object {
@@ -67,13 +68,7 @@ class UploadService {
         try {
             val file = ctx.uploadedFile("file") ?: throw BadRequestException("file is mandatory in the request")
 
-            val response = listOf(
-                SuccessGuessPhotoResponse(78.5, TrashCategories.CARDBOARD),
-                SuccessGuessPhotoResponse(5.5, TrashCategories.PLASTIC),
-                SuccessGuessPhotoResponse(2.0, TrashCategories.PAPER)
-            )
-
-            ctx.json(response)
+            ctx.json(getProbability(file.content.readBytes()))
         } catch (ex: BadRequestException) {
             logger.error { "Bad Request: ${ex.message}" }
             throw ex
@@ -85,10 +80,29 @@ class UploadService {
 
     private fun resize(img: BufferedImage, height: Int, width: Int): BufferedImage {
         val tmp: Image = img.getScaledInstance(width, height, Image.SCALE_SMOOTH)
-        val resized =  BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
+        val resized = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
         val g2d: Graphics2D = resized.createGraphics()
         g2d.drawImage(tmp, 0, 0, null)
         g2d.dispose()
         return resized
+    }
+
+    private fun getProbability(imageBytes: ByteArray): List<SuccessGuessPhotoResponse> {
+        val graphDef = File(ClassLoader.getSystemClassLoader().getResource("output_graph.pb")?.file).readBytes()
+        val labels = File(ClassLoader.getSystemClassLoader().getResource("output_labels.txt")?.file).readLines()
+        LabelImage.constructAndExecuteGraphToNormalizeImage(imageBytes).use { image ->
+            val labelProbabilities = LabelImage.executeInceptionGraph(graphDef, image)
+
+            return labelProbabilities.withIndex().map { (index, probability) ->
+                println(
+                    String.format(
+                        "MATCH: %s (%.2f%% likely)",
+                        labels[index],
+                        probability * 100f
+                    )
+                )
+                SuccessGuessPhotoResponse(probability * 100f.toDouble(), TrashCategories.valueOf(labels[index].toUpperCase()))
+            }.sortedByDescending{ it.accuracy }
+        }
     }
 }
