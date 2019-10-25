@@ -32,38 +32,6 @@ import org.tensorflow.types.UInt8
 
 /** Sample use of the TensorFlow Java API to label images using a pre-trained model.  */
 object LabelImage {
-    private fun printUsage(s: PrintStream) {
-        val url = "https://storage.googleapis.com/download.tensorflow.org/models/inception5h.zip"
-        s.println(
-            "Java program that uses a pre-trained Inception model (http://arxiv.org/abs/1512.00567)"
-        )
-        s.println("to label JPEG images.")
-        s.println("TensorFlow version: " + TensorFlow.version())
-        s.println()
-        s.println("Usage: label_image <model dir> <image file>")
-        s.println()
-        s.println("Where:")
-        s.println("<model dir> is a directory containing the unzipped contents of the inception model")
-        s.println("            (from $url)")
-        s.println("<image file> is the path to a JPEG image file")
-    }
-
-    @JvmStatic
-    fun main(args: Array<String>) {
-        if (args.size != 2) {
-            printUsage(System.err)
-            System.exit(1)
-        }
-        val modelDir = args[0]
-        val imageFile = args[1]
-
-        val graphDef = readAllBytesOrExit(Paths.get(modelDir, "tensorflow_inception_graph.pb"))
-        val labels = readAllLinesOrExit(Paths.get(modelDir, "imagenet_comp_graph_label_strings.txt"))
-        val imageBytes = readAllBytesOrExit(Paths.get(imageFile))
-
-
-    }
-
     fun constructAndExecuteGraphToNormalizeImage(imageBytes: ByteArray?): Tensor<java.lang.Float> {
         Graph().use { g ->
             val b = GraphBuilder(g)
