@@ -4,7 +4,7 @@
   let uploadContentSectionHidden = false
   let uploadedContentSectionHidden = true
   let imageResult
-  let accuracy
+  let accuracy = ""
 
   async function onChangeTakePicture(event) {
     let files = event.target.files
@@ -210,7 +210,7 @@
   </section>
   <section class="uploaded-content" class:hidden={ uploadedContentSectionHidden === true }>
     <p>
-      <img src={imageSrc} alt="" id="show-picture" on:load={() => URL.revokeObjectURL(imageSrc)} />
+      <img src={imageSrc} alt="" id="show-picture" on:load={() => window.URL.revokeObjectURL(imageSrc)} />
     </p>
     <p>
       <img src={imageResult} alt="" id="result" />
