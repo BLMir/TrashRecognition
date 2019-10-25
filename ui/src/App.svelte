@@ -7,73 +7,72 @@
   let accuracy
 
   async function onChangeTakePicture(event) {
-    let file = await resolveFile(event)
-    let { responseText } = await doRequest(file)
+    let files = event.target.files
+    let file = files[0]
 
-    let response = JSON.parse(responseText)
+    if (files && files.length > 0) {
+      let fileURL = await resolveURL(file)
+      imageSrc = fileURL
 
-    if (response.length) {
-      let guess = response[0]
-      console.log(`It is ${guess.trashCategory} with ${Math.ceil(guess.accuracy)}%`)
-      accuracy = `${Math.ceil(guess.accuracy)}%`
-      // [{"accuracy":59.76182818412781,"trashCategory":"PLASTIC"},{"accuracy":28.87408137321472,"trashCategory":"TRASH"},{"accuracy":11.353419721126556,"trashCategory":"PAPER"},{"accuracy":0.009257901547243819,"trashCategory":"CARDBOARD"},{"accuracy":0.001283600795431994,"trashCategory":"GLASS"},{"accuracy":1.2141181287006475E-4,"trashCategory":"METAL"}]
-      switch(guess.trashCategory) {
-        case 'PLASTIC':
-          imageResult = '/plastic.png'
-          break
-        case 'TRASH':
-          imageResult = '/organic.png'
-          break
-        case 'PAPER':
-        case 'CARDBOARD':
-          imageResult = '/cardboard.png'
-          break
-        case 'GLASS':
-          imageResult = '/glass.png'
-          break
-        case 'METAL':
-          imageResult = '/plastic.png'
-          break
+      file = await resizeImage(fileURL)
+      let { responseText } = await doRequest(file)
+
+      let response = JSON.parse(responseText)
+
+      if (response.length) {
+        let guess = response[0]
+        accuracy = `${Math.ceil(guess.accuracy)}%`
+
+        console.log(`It is ${guess.trashCategory} with ${accuracy}`)
+
+        // [{"accuracy":59.76182818412781,"trashCategory":"PLASTIC"},{"accuracy":28.87408137321472,"trashCategory":"TRASH"},{"accuracy":11.353419721126556,"trashCategory":"PAPER"},{"accuracy":0.009257901547243819,"trashCategory":"CARDBOARD"},{"accuracy":0.001283600795431994,"trashCategory":"GLASS"},{"accuracy":1.2141181287006475E-4,"trashCategory":"METAL"}]
+        switch(guess.trashCategory) {
+          case 'PLASTIC':
+          case 'METAL':
+            imageResult = '/plastic.png'
+            break
+          case 'TRASH':
+            imageResult = '/organic.png'
+            break
+          case 'PAPER':
+          case 'CARDBOARD':
+            imageResult = '/cardboard.png'
+            break
+          case 'GLASS':
+            imageResult = '/glass.png'
+            break
+        }
       }
+    } else {
+      errorText = "No picture selected"
     }
   }
 
-  function resolveFile(event) {
+  function resolveURL(file) {
     return new Promise((resolve, reject) => {
-      let files = event.target.files,
-        file
+      try {
+        let imgURL = window.URL.createObjectURL(file)
 
-      if (files && files.length > 0) {
-        file = files[0]
+        uploadContentSectionHidden = true
+        uploadedContentSectionHidden = false
+
+        resolve(imgURL)
+      } catch (e) {
         try {
-          imageSrc = window.URL.createObjectURL(file)
-          URL.revokeObjectURL(imgURL)
+          let fileReader = new FileReader()
+
+          fileReader.onload = function (event) {
+            resolve(event.target.result)
+          }
+
+          fileReader.readAsDataURL(file)
 
           uploadContentSectionHidden = true
           uploadedContentSectionHidden = false
-          resolve(file)
         } catch (e) {
-          try {
-            let fileReader = new FileReader()
-
-            fileReader.onload = function (event) {
-                imageSrc = event.target.result
-            }
-
-            fileReader.readAsDataURL(file)
-
-            uploadContentSectionHidden = true
-            uploadedContentSectionHidden = false
-            resolve(file)
-          }
-          catch (e) {
-            errorText = "Neither createObjectURL or FileReader are supported"
-            reject(errorText)
-          }
+          errorText = "Neither createObjectURL or FileReader are supported"
+          reject(errorText)
         }
-      } else {
-        errorText = "No picture selected"
-        reject(errorText)
       }
     })
   }
@@ -108,10 +107,38 @@
       xhr.send(formData)
     })
   }
+
+  function resizeImage(src) {
+    return new Promise((resolve, reject) => {
+      let c = document.createElement('canvas')
+      c.width = 300
+      c.height = 300
+      let ctx = c.getContext('2d')
+
+      let img = new Image()
+
+      img.onload = function() {
+        ctx.drawImage(img, 0, 0, c.width, c.height);
+        let url = c.toDataURL('image/png', 1)
+        resolve(dataURLtoFile(url, 'picture.png'))
+      }
+
+      img.src = src;
+    })
+  }
+
+  function dataURLtoFile(dataurl, filename) {
+    let arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+    bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, {type:mime});
+  }
 </script>
 
 <style>
-  h1,h2 {
+  h1, h2 {
     text-align: center;
   }
 
@@ -183,7 +210,7 @@
   </section>
   <section class="uploaded-content" class:hidden={ uploadedContentSectionHidden === true }>
     <p>
-      <img src={imageSrc} alt="" id="show-picture" />
+      <img src={imageSrc} alt="" id="show-picture" on:load={() => URL.revokeObjectURL(imageSrc)} />
     </p>
     <p>
       <img src={imageResult} alt="" id="result" />
