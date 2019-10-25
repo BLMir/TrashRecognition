@@ -36,7 +36,9 @@ data class SuccessGuessPhotoResponse(val accuracy: Double, val trashCategory: Tr
 class UploadService {
 
     init {
-        val app = Javalin.create().start(7000)
+        val app = Javalin.create{
+            it.enableCorsForAllOrigins()
+        }.start(7000)
         app.get("/") { ctx -> ctx.result("Hello World") }
         app.post("/upload") { ctx -> fileUploads(ctx) }
         app.post("/guess-photo") { ctx -> guessPhoto(ctx) }
