@@ -100,7 +100,7 @@
         }
       }
 
-      xhr.open('post', 'http://localhost:7000/guess-photo', true)
+      xhr.open('post', 'http://ecotrash.site:7000/guess-photo', true)
 
       let formData = new FormData()
       formData.append("file", file)
