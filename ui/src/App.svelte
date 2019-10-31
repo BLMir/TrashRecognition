@@ -100,7 +100,7 @@
         }
       }
 
-      xhr.open('post', 'http://lifk.es:7000/guess-photo', true)
+      xhr.open('post', 'http://localhost:7000/guess-photo', true)
 
       let formData = new FormData()
       formData.append("file", file)
