@@ -7,8 +7,5 @@ jobs:
     runs-on: [self-hosted]
 
     steps:
-      - working-directory: /root
         run: |
-          cd TrashRecognition
-          git pull origin master
-          ./gradlew shadowJar
+          mkdir yep
