@@ -1,0 +1,14 @@
+name: Java CD
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: [self-hosted]
+
+    steps:
+      - working-directory: /root
+        run: |
+          cd TrashRecognition
+          git pull origin master
+          ./gradlew shadowJar
