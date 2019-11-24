@@ -5,7 +5,6 @@ on: [push]
 jobs:
   build:
     runs-on: [self-hosted]
-
+    name: build shadowjar
     steps:
-        run: |
-          mkdir yep
+      - run: mkdir yep
