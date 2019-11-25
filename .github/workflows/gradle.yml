@@ -7,6 +7,5 @@ jobs:
     runs-on: [self-hosted]
     name: build shadowja
     steps:
-      - working-directory: /var/www
       - name: pull master
         uses: actions/checkout@v1
