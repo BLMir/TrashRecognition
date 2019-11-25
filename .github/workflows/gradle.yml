@@ -5,7 +5,10 @@ on: [push]
 jobs:
   build:
     runs-on: [self-hosted]
-    name: build shadowja
     steps:
       - name: pull master
         uses: actions/checkout@v1
+      - name: buil shadowJar
+        run: ./gradlew shadowJar
+      - name: move jar
+        run: mv build/libs/trash-classifier-1.0-SNAPSHOT-all.jar /var/www/BE
