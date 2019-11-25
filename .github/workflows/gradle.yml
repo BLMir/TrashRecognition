@@ -5,6 +5,8 @@ on: [push]
 jobs:
   build:
     runs-on: [self-hosted]
-    name: build shadowjar
+    name: build shadowja
     steps:
+      - uses: actions/checkout@v1
+      - working-directory: /var/www
       - run: mkdir yep
