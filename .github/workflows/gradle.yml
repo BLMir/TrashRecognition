@@ -10,5 +10,3 @@ jobs:
       - working-directory: /var/www
       - name: pull master
         uses: actions/checkout@v1
-      - name: create folder
-        run: mkdir yep
