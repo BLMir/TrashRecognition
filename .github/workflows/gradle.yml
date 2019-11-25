@@ -12,3 +12,5 @@ jobs:
         run: ./gradlew shadowJar
       - name: move jar
         run: mv build/libs/trash-classifier-1.0-SNAPSHOT-all.jar /var/www/BE
+      - name: run the jar
+        run: java -cp libtensorflow-1.14.0.jar:. -Djava.library.path=. -jar trash-classifier-1.0-SNAPSHOT-all.jar
