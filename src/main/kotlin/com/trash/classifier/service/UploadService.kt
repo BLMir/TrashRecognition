@@ -111,7 +111,7 @@ class UploadService(val model: ByteArray, val labels: List<String>) {
             return labelProbabilities.withIndex().map { (index, probability) ->
                 println(
                     String.format(
-                        "MATCH: %s (%.2f%% likely)",
+                        "-MATCH: %s (%.2f%% likely)",
                         labels[index],
                         probability * 100f
                     )
