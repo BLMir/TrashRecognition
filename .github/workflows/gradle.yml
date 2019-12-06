@@ -24,7 +24,7 @@ jobs:
       - name: who am i
         run: whoami
       - name: login to docker in image to github
-        run:  sudo docker login docker.pkg.github.com --username BLMir --password "${GITHUB_PSW_PULL}"
+        run: docker login docker.pkg.github.com --username BLMir --password "${GITHUB_PSW_PULL}"
         env:  
           GITHUB_PSW_PULL: ${{ secrets.GITHUB_PULL_CREDENTIALS }}
       - name: pull image
