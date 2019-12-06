@@ -3,16 +3,32 @@ name: Java CD
 on: [push]
 
 jobs:
-  build:
-    runs-on: [ubuntu-latest]
+#   build:
+#     runs-on: [ubuntu-latest]
+#     steps:
+#       - name: pull master
+#         uses: actions/checkout@v1
+#       - name: buil docker container
+#         run: ./gradlew jibDockerBuild
+#       - name: login to docker in image to github
+#         run:  docker login docker.pkg.github.com --username BLMir --password "${GITHUB_PSW}"
+#         env:  
+#           GITHUB_PSW: ${{ secrets.GITHUB_PUSH_CREDENTIALS }}
+#       - name : tag image docker
+#         run: docker tag trash-classifier:1.0-SNAPSHOT docker.pkg.github.com/blmir/trashrecognition/trash-classifier
+#       - name: push docker image to registry in github
+#         run:  docker push docker.pkg.github.com/blmir/trashrecognition/trash-classifier
+  runing:
+    runs-on: [self-hosted]
     steps:
-      - name: pull master
-        uses: actions/checkout@v1
-      - name: buil docker container
-        run: ./gradlew jibDockerBuild
+      - name: who am i
+        run: whoami
       - name: login to docker in image to github
-        run:  docker login docker.pkg.github.com --username BLMir --password "${GITHUB_PSW}"
+        run: docker login docker.pkg.github.com --username BLMir --password "${GITHUB_PSW_PULL}"
         env:  
-          GITHUB_PSW: ${{ secrets.GITHUB_PUSH_CREDENTIALS }}	
-      - name: push docker image to registry in github
-        run:  docker push docker.pkg.github.com/blmir/trashRecognition/trash-classifier:1
+          GITHUB_PSW_PULL: ${{ secrets.GITHUB_PULL_CREDENTIALS }}
+      - name: pull image
+        run: docker pull docker.pkg.github.com/blmir/trashrecognition/trash-classifier:latest
+      - name: run image
+        run: docker run -d -v /var/www/BE/model:/tmp docker.pkg.github.com/blmir/trashrecognition/trash-classifier
+
