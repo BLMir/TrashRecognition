@@ -15,4 +15,4 @@ jobs:
         env:  
           GITHUB_PSW: ${{ secrets.GITHUB_PUSH_CREDENTIALS }}	
       - name: push docker image to registry in github
-        run:  docker push docker.pkg.github.com/blmir/trashRecognition/trash-classifier:1
+        run:  docker push docker.pkg.github.com/blmir/trashrecognition/trash-classifier:1
