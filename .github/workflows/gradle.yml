@@ -21,6 +21,8 @@ jobs:
   runing:
     runs-on: [self-hosted]
     steps:
+      - name: who am i
+        run: whoami
       - name: login to docker in image to github
         run:  docker login docker.pkg.github.com --username BLMir --password "${GITHUB_PSW}"
         env:  
