@@ -28,6 +28,6 @@ jobs:
         env:  
           GITHUB_PSW_PULL: ${{ secrets.GITHUB_PULL_CREDENTIALS }}
       - name: pull image
-        run: sudo docker pull docker.pkg.github.com/blmir/trashrecognition/trash-classifier:latest
+        run: docker pull docker.pkg.github.com/blmir/trashrecognition/trash-classifier:latest
       - name: run image
         run: docker run trash-classifier
