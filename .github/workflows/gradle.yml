@@ -30,4 +30,5 @@ jobs:
       - name: pull image
         run: docker pull docker.pkg.github.com/blmir/trashrecognition/trash-classifier:latest
       - name: run image
-        run: docker run trash-classifier
+        run: docker run -v /var/www/BE/model:/tmp docker.pkg.github.com/blmir/trashrecognition/trash-classifier
+
