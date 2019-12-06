@@ -24,10 +24,10 @@ jobs:
       - name: who am i
         run: whoami
       - name: login to docker in image to github
-        run:  docker login docker.pkg.github.com --username BLMir --password "${GITHUB_PSW_PULL}"
+        run:  sudo docker login docker.pkg.github.com --username BLMir --password "${GITHUB_PSW_PULL}"
         env:  
           GITHUB_PSW_PULL: ${{ secrets.GITHUB_PULL_CREDENTIALS }}
       - name: pull image
-        run: docker pull docker.pkg.github.com/blmir/trashrecognition/trash-classifier:latest
+        run: sudo docker pull docker.pkg.github.com/blmir/trashrecognition/trash-classifier:latest
       - name: run image
         run: docker run trash-classifier
