@@ -4,7 +4,7 @@ import com.trash.classifier.service.UploadService
 import java.io.FileInputStream
 import java.net.URL
 
-var envVarUrl: String = System.getenv("varname") ?: "./output_graph.pb"
+var envVarUrl: String = System.getenv("varname") ?: "/tmp/output_graph.pb"
 
 
 fun main() {

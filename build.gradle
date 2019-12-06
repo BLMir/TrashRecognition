@@ -11,6 +11,7 @@ buildscript {
 }
 plugins {
     id 'com.github.johnrengelman.shadow' version '2.0.4'
+    id 'com.google.cloud.tools.jib' version '1.8.0'
 }
 
 apply plugin: 'java'
@@ -27,6 +28,25 @@ jar {
         attributes(
                 'Main-Class': mainClassName
         )
+    }
+}
+
+jib {
+    container {
+        ports = ["8088"]
+        mainClass = mainClassName
+
+        // good defauls intended for Java 8 (>= 8u191) containers
+        jvmFlags = [
+                "-server",
+                "-Djava.awt.headless=true",
+                "-XX:InitialRAMFraction=2",
+                "-XX:MinRAMFraction=2",
+                "-XX:MaxRAMFraction=2",
+                "-XX:+UseG1GC",
+                "-XX:MaxGCPauseMillis=100",
+                "-XX:+UseStringDeduplication"
+        ]
     }
 }
 
