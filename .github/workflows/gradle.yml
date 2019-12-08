@@ -19,6 +19,7 @@ jobs:
       - name: push docker image to registry in github
         run:  docker push docker.pkg.github.com/blmir/trashrecognition/trash-classifier
   runing:
+    needs: build
     runs-on: [self-hosted]
     steps:
       - name: login to docker in image to github
