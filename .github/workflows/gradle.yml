@@ -21,6 +21,7 @@ jobs:
   runing:
     runs-on: [self-hosted]
     steps:
+      - continue-on-error: true
       - name: login to docker in image to github
         run: docker login docker.pkg.github.com --username BLMir --password "${GITHUB_PSW_PULL}"
         env:  
