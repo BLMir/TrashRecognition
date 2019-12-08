@@ -21,14 +21,16 @@ jobs:
   runing:
     runs-on: [self-hosted]
     steps:
-      - name: who am i
-        run: whoami
       - name: login to docker in image to github
         run: docker login docker.pkg.github.com --username BLMir --password "${GITHUB_PSW_PULL}"
         env:  
           GITHUB_PSW_PULL: ${{ secrets.GITHUB_PULL_CREDENTIALS }}
       - name: pull image
         run: docker pull docker.pkg.github.com/blmir/trashrecognition/trash-classifier:latest
+      - name: kill current container
+        run: |
+          docker stop backend
+          docker rm backend
       - name: run image
-        run: docker run -d -v /var/www/BE/model:/tmp docker.pkg.github.com/blmir/trashrecognition/trash-classifier
+        run: docker run --name=backend --restart=yes -d -v /var/www/BE/model:/tmp docker.pkg.github.com/blmir/trashrecognition/trash-classifier
 
