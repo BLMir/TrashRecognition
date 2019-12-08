@@ -21,7 +21,6 @@ jobs:
   runing:
     runs-on: [self-hosted]
     steps:
-      - continue-on-error: true
       - name: login to docker in image to github
         run: docker login docker.pkg.github.com --username BLMir --password "${GITHUB_PSW_PULL}"
         env:  
@@ -29,6 +28,7 @@ jobs:
       - name: pull image
         run: docker pull docker.pkg.github.com/blmir/trashrecognition/trash-classifier:latest
       - name: kill current container
+        continue-on-error: true
         run: |
           docker stop backend
           docker rm backend
