@@ -201,7 +201,7 @@
   <h1>Trash Recognition</h1>
 
   <section class="upload-content" class:hidden={ uploadContentSectionHidden === true }>
-    <h2>Upload Image: git</h2>
+    <h2>Upload Image: git2</h2>
     <p>
         <input type="file" id="take-picture" accept="image/*" on:change={onChangeTakePicture}>
         <label for="take-picture">
