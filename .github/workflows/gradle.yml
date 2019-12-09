@@ -1,7 +1,11 @@
 name: Java CD
 
-on: [push]
-
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'src/main/*'
 jobs:
   build:
     runs-on: [ubuntu-latest]
