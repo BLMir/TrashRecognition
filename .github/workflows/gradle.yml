@@ -38,5 +38,5 @@ jobs:
           docker stop backend
           docker rm backend
       - name: run image
-        run: docker run --name=backend -d -v /var/www/BE/model:/tmp docker.pkg.github.com/blmir/trashrecognition/trash-classifier
+        run: docker run --name=backend  -p 7000:7000 -d -v /var/www/BE/model:/tmp docker.pkg.github.com/blmir/trashrecognition/trash-classifier
 

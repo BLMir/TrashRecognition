@@ -1,0 +1,19 @@
+name: UI CD
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'ui/src/*'
+jobs:
+  build:
+    runs-on: [self-hosted]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: build the front end
+      run: npm run build
+      working-directory: ./ui
+    - name: move ui static folder
+      run: mv ui/public/* /var/www/FE
