@@ -19,4 +19,4 @@ jobs:
         pip install --upgrade tensorflow-hub
         sudo apt install sshpass
     - name: copy dataset
-      run: sshpass -p '{secrets.VPS_PASS}' scp {secrets.VPS_USER}@{secrets.VPS_HOST}:/root/dataset-03012020.tar .
+      run: sshpass -p '${{secrets.VPS_PASS}}' scp ${{secrets.VPS_USER}}@${{secrets.VPS_HOST}}:/root/dataset-03012020.tar .
