@@ -2,7 +2,7 @@ name: Machine learning process
 
 on:
   schedule:
-    - cron: '* * * * *'
+    - cron: '0 0 1 * *'
 jobs:
   build:
 
