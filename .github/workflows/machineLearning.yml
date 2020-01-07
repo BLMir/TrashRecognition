@@ -18,13 +18,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install "tensorflow>=2.0.0"
         pip install --upgrade tensorflow-hub
+        sudo apt install sshpass
     - name: copy dataset
-      uses: appleboy/scp-action@master
-      with:
-        host: ${{ secrets.VPS_HOST }}
-        username: ${{ secrets.VPS_USER }}
-        password: ${{ secrets.VPS_PASS }}
-        port: 22
-        source: "/root/dataset-03012020.tar"
-        target: "."
-
+      run: sshpass -p 'secrets.VPS_PASS' scp secrets.VPS_USER@secrets.VPS_HOST:/root/dataset-03012020.tar .
