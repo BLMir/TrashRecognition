@@ -18,4 +18,4 @@ jobs:
 #         pip install "tensorflow>=2.0.0"
 #         pip install --upgrade tensorflow-hub
     - name: copy dataset
-      run: wget "http://exotrash.site/dataset-03012020.tar" 
+      run: wget "http://ecotrash.site/dataset-03012020.tar" 
