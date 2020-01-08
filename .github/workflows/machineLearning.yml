@@ -8,14 +8,20 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-#     - name: Set up Python 3.7
-#       uses: actions/setup-python@v1
-#       with:
-#         python-version: 3.7
-#     - name: Install dependencies
-#       run: |
-#         python -m pip install --upgrade pip
-#         pip install "tensorflow>=2.0.0"
-#         pip install --upgrade tensorflow-hub
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install "tensorflow>=2.0.0"
+        pip install --upgrade tensorflow-hub
     - name: copy dataset
       run: wget "http://ecotrash.site/dataset-03012020.tar" 
+    - name: unzip tar file
+      run: tar -xvf dataset-03012020.tar dataset
+    - name: download tensorflow hub
+      run: curl -LO https://github.com/tensorflow/hub/raw/master/examples/image_retraining/retrain.py
+    - name: run tensorflow 
+      run: python retrain.py --image_dir dataset-03⁄01⁄2020
