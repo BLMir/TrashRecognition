@@ -26,3 +26,15 @@ jobs:
       run: curl -LO https://github.com/tensorflow/hub/raw/master/examples/image_retraining/retrain.py
     - name: run tensorflow 
       run: python retrain.py --image_dir dataset-03⁄01⁄2020
+    - name: ls
+      run: ls
+    - uses: actions/checkout@master
+    - name: copy file via ssh password
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_NAME }}
+        password: ${{ secrets.VPS_PASS }}
+        port: 22
+        source: "output_graph.pb"
+        target: "/var/www/BE"
