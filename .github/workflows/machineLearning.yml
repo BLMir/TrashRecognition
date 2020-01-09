@@ -15,8 +15,9 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install "tensorflow>=1.14"
+        pip install "tensorflow>=1.13.2"
         pip install --upgrade tensorflow-hub
+        pip install tensorflow_estimator
     - name: copy dataset
       run: wget "http://ecotrash.site/dataset-03012020.tar" 
     - name: ls
