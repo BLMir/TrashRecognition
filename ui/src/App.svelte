@@ -198,7 +198,7 @@
 </style>
 
 <div class="container">
-  <h1>Trash Recognition</h1>
+  <h1>Trash Recognition v0.1</h1>
 
   <section class="upload-content" class:hidden={ uploadContentSectionHidden === true }>
     <h2>Upload Image: git2</h2>
