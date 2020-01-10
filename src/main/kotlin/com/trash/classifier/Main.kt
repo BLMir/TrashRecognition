@@ -6,7 +6,6 @@ import java.net.URL
 
 var envVarUrl: String = System.getenv("varname") ?: "/tmp/output_graph.pb"
 
-
 fun main() {
     UploadService(
         FileInputStream(envVarUrl).readBytes(),
