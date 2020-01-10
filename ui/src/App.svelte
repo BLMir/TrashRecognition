@@ -100,6 +100,7 @@
         }
       }
 
+      
       xhr.open('post', 'http://ecotrash.site:7000/guess-photo', true)
 
       let formData = new FormData()
