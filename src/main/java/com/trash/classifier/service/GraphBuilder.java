@@ -8,13 +8,6 @@ import org.tensorflow.types.UInt8;
 
 import java.util.UUID;
 
-/**
- * Created by alse on 8/30/17.
- * Project: https://github.com/alseambusher/Tensorflow-Examples4j
- *
- * Api for graph operations are not available for java yet, so let us create a class for it
- */
-
 class GraphBuilder {
     GraphBuilder(Graph g) {
         this.g = g;
