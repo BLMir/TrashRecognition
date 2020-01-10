@@ -95,7 +95,7 @@ class UploadService(val model: ByteArray, val labels: List<String>) {
         } catch ( ex: IllegalArgumentException) {
 
         } catch (ex: Exception) {
-            logger.error { "Error guessing a photo" }
+            logger.error { "Error guessing a photo, sorry about that" }
             throw ex
         }
     }
