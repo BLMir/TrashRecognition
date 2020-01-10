@@ -80,7 +80,6 @@
   function doRequest(file) {
     return new Promise((resolve, reject) => {
       let xhr = new XMLHttpRequest()
-
       xhr.addEventListener('progress', function(e) {
         let done = e.position || e.loaded, total = e.totalSize || e.total
         console.log('xhr progress: ' + (Math.floor(done/total*1000)/10) + '%')
